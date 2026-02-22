@@ -18,6 +18,7 @@ export interface ForgeState {
   fontFamily: string;
   mode: "light" | "dark";
   style: "default" | "nova";
+  projectName: string;
 
   setPreset: (preset: string) => void;
   setBaseColor: (color: BaseColorName) => void;
@@ -26,6 +27,7 @@ export interface ForgeState {
   setFontFamily: (font: string) => void;
   setMode: (mode: "light" | "dark") => void;
   setStyle: (style: "default" | "nova") => void;
+  setProjectName: (name: string) => void;
   randomize: () => void;
   reset: () => void;
 }
@@ -42,6 +44,7 @@ const DEFAULTS = {
   fontFamily: "Inter",
   mode: "light" as const,
   style: "default" as const,
+  projectName: "",
 };
 
 export const useForgeStore = create<ForgeState>((set) => ({
@@ -69,6 +72,7 @@ export const useForgeStore = create<ForgeState>((set) => ({
   setFontFamily: (font) => set({ fontFamily: font }),
   setMode: (mode) => set({ mode }),
   setStyle: (style) => set({ style }),
+  setProjectName: (name) => set({ projectName: name }),
 
   randomize: () => {
     set({
