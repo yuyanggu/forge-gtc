@@ -1,6 +1,6 @@
 "use client";
 
-import { Copy, Download } from "lucide-react";
+import { Copy, Download, Info } from "lucide-react";
 import { toast } from "sonner";
 import { useForgeStore } from "@/lib/store";
 import {
@@ -8,6 +8,8 @@ import {
   generateTailwindConfig,
   generateComponentsJson,
 } from "@/lib/css-generator";
+import { generateAIPrompt } from "@/lib/ai-prompt-generator";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -16,13 +18,21 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { BaseColorName, ThemeColorName } from "@/lib/themes";
 
-function CopyButton({ text }: { text: string }) {
+function CopyButton({
+  text,
+  toastMessage = "Copied to clipboard",
+}: {
+  text: string;
+  toastMessage?: string;
+}) {
   const handleCopy = async () => {
     await navigator.clipboard.writeText(text);
-    toast.success("Copied to clipboard");
+    toast.success(toastMessage);
   };
 
   return (
@@ -45,7 +55,16 @@ export function ExportDialog({
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 }) {
-  const { baseColor, themeColor, radius, fontFamily } = useForgeStore();
+  const {
+    baseColor,
+    themeColor,
+    radius,
+    fontFamily,
+    mode,
+    style,
+    projectName,
+    setProjectName,
+  } = useForgeStore();
 
   const config = {
     baseColor: baseColor as BaseColorName,
@@ -57,6 +76,15 @@ export function ExportDialog({
   const cssOutput = generateCSS(config);
   const tailwindOutput = generateTailwindConfig(config);
   const componentsOutput = generateComponentsJson(config);
+  const aiPromptOutput = generateAIPrompt({
+    projectName,
+    style,
+    baseColor,
+    themeColor,
+    radius,
+    fontFamily,
+    mode,
+  });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -66,11 +94,11 @@ export function ExportDialog({
           Export
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-[60rem] overflow-hidden">
         <DialogHeader>
           <DialogTitle>Export Theme</DialogTitle>
         </DialogHeader>
-        <Tabs defaultValue="css" className="mt-2">
+        <Tabs defaultValue="css" className="mt-2 min-w-0">
           <TabsList className="w-full">
             <TabsTrigger value="css" className="flex-1">
               CSS Variables
@@ -81,9 +109,12 @@ export function ExportDialog({
             <TabsTrigger value="components" className="flex-1">
               components.json
             </TabsTrigger>
+            <TabsTrigger value="ai-prompt" className="flex-1">
+              AI Prompt
+            </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="css" className="space-y-3">
+          <TabsContent value="css" className="min-w-0 space-y-3">
             <div className="flex justify-end">
               <CopyButton text={cssOutput} />
             </div>
@@ -92,7 +123,7 @@ export function ExportDialog({
             </pre>
           </TabsContent>
 
-          <TabsContent value="tailwind" className="space-y-3">
+          <TabsContent value="tailwind" className="min-w-0 space-y-3">
             <div className="flex justify-end">
               <CopyButton text={tailwindOutput} />
             </div>
@@ -101,12 +132,46 @@ export function ExportDialog({
             </pre>
           </TabsContent>
 
-          <TabsContent value="components" className="space-y-3">
+          <TabsContent value="components" className="min-w-0 space-y-3">
             <div className="flex justify-end">
               <CopyButton text={componentsOutput} />
             </div>
             <pre className="max-h-96 overflow-auto rounded-lg border bg-muted p-4 text-xs leading-relaxed">
               <code>{componentsOutput}</code>
+            </pre>
+          </TabsContent>
+
+          <TabsContent value="ai-prompt" className="min-w-0 space-y-3">
+            <div className="space-y-1">
+              <Label htmlFor="project-name" className="text-sm font-medium">
+                Project name
+              </Label>
+              <p className="text-xs text-muted-foreground">
+                Optional — gives your design system a name in the prompt
+              </p>
+              <Input
+                id="project-name"
+                placeholder="e.g. WSG Experiment UI Kit"
+                value={projectName}
+                onChange={(e) => setProjectName(e.target.value)}
+              />
+            </div>
+            <Alert>
+              <Info className="h-4 w-4" />
+              <AlertDescription>
+                Paste this into Claude Projects instructions, a .cursorrules
+                file, or CLAUDE.md in your repo root. Every AI-generated
+                component will use your exact design tokens.
+              </AlertDescription>
+            </Alert>
+            <div className="flex justify-end">
+              <CopyButton
+                text={aiPromptOutput}
+                toastMessage="AI prompt copied to clipboard"
+              />
+            </div>
+            <pre className="max-h-96 overflow-auto rounded-lg border bg-muted p-4 text-xs leading-relaxed">
+              <code>{aiPromptOutput}</code>
             </pre>
           </TabsContent>
         </Tabs>

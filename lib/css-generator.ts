@@ -16,17 +16,20 @@ export function generateCSS(config: ThemeConfig): string {
   const base = baseColors[config.baseColor];
   const theme = themeColors[config.themeColor];
 
+  const fontStack = `"${config.fontFamily}", ui-sans-serif, system-ui, sans-serif`;
   const lightVars: Record<string, string> = {
     ...base.light,
     ...theme.light,
     "--radius": `${config.radius}rem`,
-    "--font-sans": `"${config.fontFamily}", ui-sans-serif, system-ui, sans-serif`,
+    "--font-sans": fontStack,
+    "--font-geist-sans": fontStack,
   };
   const darkVars: Record<string, string> = {
     ...base.dark,
     ...theme.dark,
     "--radius": `${config.radius}rem`,
-    "--font-sans": `"${config.fontFamily}", ui-sans-serif, system-ui, sans-serif`,
+    "--font-sans": fontStack,
+    "--font-geist-sans": fontStack,
   };
 
   const formatVars = (vars: Record<string, string>) =>
@@ -34,7 +37,7 @@ export function generateCSS(config: ThemeConfig): string {
       .map(([k, v]) => `  ${k}: ${v};`)
       .join("\n");
 
-  return `:root {\n${formatVars(lightVars)}\n}\n\n.dark {\n${formatVars(darkVars)}\n}`;
+  return `:root {\n${formatVars(lightVars)}\n}\n\n.dark {\n${formatVars(darkVars)}\n}\n\nbody {\n  --font-geist-sans: ${fontStack};\n}`;
 }
 
 export function generateTailwindConfig(config: ThemeConfig): string {

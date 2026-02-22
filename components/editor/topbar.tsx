@@ -1,6 +1,7 @@
 "use client";
 
-import { Hammer, Moon, Sun } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
+import Image from "next/image";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { ExportDialog } from "@/components/editor/export-dialog";
@@ -17,8 +18,22 @@ export function Topbar({
   return (
     <header className="fixed inset-x-0 top-0 z-50 flex h-14 items-center justify-between border-b bg-background/80 px-6 backdrop-blur-sm">
       <div className="flex items-center gap-2">
-        <Hammer className="h-5 w-5 text-primary" />
-        <span className="text-lg font-bold tracking-tight">Forge</span>
+        <Image
+          src="/forge_black.png"
+          alt="Forge"
+          width={120}
+          height={36}
+          className="h-9 w-auto dark:hidden"
+          priority
+        />
+        <Image
+          src="/forge_white.png"
+          alt="Forge"
+          width={120}
+          height={36}
+          className="h-9 w-auto hidden dark:block"
+          priority
+        />
       </div>
       <div className="flex items-center gap-2">
         <Button
