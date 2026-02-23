@@ -4,17 +4,22 @@ import {
   type BaseColorName,
   type ThemeColorName,
 } from "./themes";
+import { generateCustomThemeVars } from "./colors";
 
 export interface ThemeConfig {
   baseColor: BaseColorName;
   themeColor: ThemeColorName;
   radius: number;
   fontFamily: string;
+  customColor?: string;
 }
 
 export function generateCSS(config: ThemeConfig): string {
   const base = baseColors[config.baseColor];
-  const theme = themeColors[config.themeColor];
+  const theme =
+    config.themeColor === "custom" && config.customColor
+      ? generateCustomThemeVars(config.customColor)
+      : themeColors[config.themeColor];
 
   const fontStack = `"${config.fontFamily}", ui-sans-serif, system-ui, sans-serif`;
   const lightVars: Record<string, string> = {

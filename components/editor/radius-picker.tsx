@@ -21,7 +21,7 @@ export function RadiusPicker() {
   const isDefault = radius === 0.625;
 
   return (
-    <div className="space-y-3">
+    <div>
       <div className="flex items-center justify-between">
         <label className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
           Radius
@@ -30,14 +30,16 @@ export function RadiusPicker() {
           {radius}rem{isDefault ? " (default)" : ""}
         </span>
       </div>
-      <Slider
-        min={0}
-        max={RADIUS_VALUES.length - 1}
-        step={1}
-        value={[sliderValue]}
-        onValueChange={handleChange}
-      />
-      <div className="flex items-center justify-center pt-1">
+      <div className="mt-2">
+        <Slider
+          min={0}
+          max={RADIUS_VALUES.length - 1}
+          step={1}
+          value={[sliderValue]}
+          onValueChange={handleChange}
+        />
+      </div>
+      <div className="mt-2 flex items-center justify-center pt-1">
         <div
           className="h-10 w-20 border-2 border-primary transition-all duration-150"
           style={{ borderRadius: `${radius}rem` }}

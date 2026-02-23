@@ -4,6 +4,7 @@ import {
   type BaseColorName,
   type ThemeColorName,
 } from "./themes";
+import { generateCustomThemeVars } from "./colors";
 
 interface AIPromptConfig {
   projectName: string;
@@ -13,11 +14,15 @@ interface AIPromptConfig {
   radius: number;
   fontFamily: string;
   mode: "light" | "dark";
+  customColor?: string;
 }
 
 function generateExportCSS(config: AIPromptConfig): string {
   const base = baseColors[config.baseColor as BaseColorName];
-  const theme = themeColors[config.themeColor as ThemeColorName];
+  const theme =
+    config.themeColor === "custom" && config.customColor
+      ? generateCustomThemeVars(config.customColor)
+      : themeColors[config.themeColor as ThemeColorName];
 
   const fontStack = `"${config.fontFamily}", ui-sans-serif, system-ui, sans-serif`;
   const lightVars: Record<string, string> = {
@@ -104,7 +109,7 @@ shadcn colors or invent new color values.
 ## Configuration
 - Style: ${config.style}
 - Base color: ${config.baseColor}
-- Theme color: ${config.themeColor}
+- Theme color: ${config.themeColor === "custom" && config.customColor ? `custom (${config.customColor})` : config.themeColor}
 - Border radius: ${config.radius}rem
 - Font family: ${config.fontFamily}
 - Icon library: Lucide (via lucide-react)

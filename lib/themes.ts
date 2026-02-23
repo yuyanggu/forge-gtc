@@ -4,6 +4,8 @@ export type ThemeColorName =
   | "neutral"
   | "red"
   | "rose"
+  | "coral"
+  | "crimson"
   | "orange"
   | "amber"
   | "yellow"
@@ -16,8 +18,15 @@ export type ThemeColorName =
   | "blue"
   | "indigo"
   | "violet"
+  | "iris"
+  | "plum"
   | "fuchsia"
-  | "pink";
+  | "pink"
+  | "bronze"
+  | "sage"
+  | "sand"
+  | "mauve"
+  | "custom";
 
 export type CSSVarMap = Record<string, string>;
 
@@ -29,10 +38,20 @@ export const BASE_COLOR_LIST: BaseColorName[] = [
   "stone",
 ];
 
+export const BASE_COLOR_DISPLAY_NAMES: Record<BaseColorName, string> = {
+  neutral: "Neutral",
+  slate: "Slate",
+  zinc: "Zinc",
+  gray: "Gray",
+  stone: "Stone",
+};
+
 export const THEME_COLOR_LIST: ThemeColorName[] = [
   "neutral",
   "red",
   "rose",
+  "coral",
+  "crimson",
   "orange",
   "amber",
   "yellow",
@@ -45,14 +64,63 @@ export const THEME_COLOR_LIST: ThemeColorName[] = [
   "blue",
   "indigo",
   "violet",
+  "iris",
+  "plum",
   "fuchsia",
   "pink",
+  "bronze",
+  "sage",
+  "sand",
+  "mauve",
+  "custom",
+];
+
+export const THEME_COLOR_DISPLAY_NAMES: Record<ThemeColorName, string> = {
+  neutral: "Neutral",
+  red: "Red",
+  rose: "Rose",
+  coral: "Coral",
+  crimson: "Crimson",
+  orange: "Orange",
+  amber: "Amber",
+  yellow: "Yellow",
+  lime: "Lime",
+  green: "Green",
+  emerald: "Emerald",
+  teal: "Teal",
+  cyan: "Cyan",
+  sky: "Sky",
+  blue: "Blue",
+  indigo: "Indigo",
+  violet: "Violet",
+  iris: "Iris",
+  plum: "Plum",
+  fuchsia: "Fuchsia",
+  pink: "Pink",
+  bronze: "Bronze",
+  sage: "Sage",
+  sand: "Sand",
+  mauve: "Mauve",
+  custom: "Custom",
+};
+
+export const THEME_COLOR_GROUPS: {
+  label: string;
+  colors: ThemeColorName[];
+}[] = [
+  { label: "Neutral", colors: ["neutral", "sage", "sand", "mauve"] },
+  { label: "Warm", colors: ["red", "rose", "coral", "crimson", "pink"] },
+  { label: "Earth", colors: ["orange", "amber", "yellow", "bronze", "lime"] },
+  { label: "Cool", colors: ["green", "emerald", "teal", "cyan", "sky"] },
+  { label: "Blue & Purple", colors: ["blue", "indigo", "violet", "iris", "plum", "fuchsia"] },
 ];
 
 export const THEME_COLOR_DISPLAY_VALUES: Record<ThemeColorName, string> = {
   neutral: "oklch(0.556 0 0)",
   red: "oklch(0.577 0.245 27.325)",
   rose: "oklch(0.585 0.233 14.717)",
+  coral: "oklch(0.64 0.2 25)",
+  crimson: "oklch(0.55 0.26 18)",
   orange: "oklch(0.705 0.213 47.604)",
   amber: "oklch(0.769 0.188 70.08)",
   yellow: "oklch(0.795 0.184 86.047)",
@@ -65,8 +133,15 @@ export const THEME_COLOR_DISPLAY_VALUES: Record<ThemeColorName, string> = {
   blue: "oklch(0.546 0.245 262.881)",
   indigo: "oklch(0.511 0.262 276.966)",
   violet: "oklch(0.541 0.281 293.009)",
+  iris: "oklch(0.53 0.24 285)",
+  plum: "oklch(0.56 0.24 310)",
   fuchsia: "oklch(0.591 0.293 322.896)",
   pink: "oklch(0.656 0.241 354.308)",
+  bronze: "oklch(0.58 0.08 55)",
+  sage: "oklch(0.55 0.04 155)",
+  sand: "oklch(0.58 0.04 75)",
+  mauve: "oklch(0.55 0.04 310)",
+  custom: "oklch(0.5 0 0)",
 };
 
 export const BASE_COLOR_DISPLAY_VALUES: Record<BaseColorName, string> = {
@@ -463,6 +538,38 @@ export const themeColors: Record<
       "--sidebar-primary-foreground": "oklch(0.985 0 0)",
     },
   },
+  coral: {
+    light: {
+      "--primary": "oklch(0.64 0.2 25)",
+      "--primary-foreground": "oklch(0.985 0 0)",
+      "--ring": "oklch(0.64 0.2 25)",
+      "--sidebar-primary": "oklch(0.64 0.2 25)",
+      "--sidebar-primary-foreground": "oklch(0.985 0 0)",
+    },
+    dark: {
+      "--primary": "oklch(0.74 0.17 25)",
+      "--primary-foreground": "oklch(0.21 0.006 285.885)",
+      "--ring": "oklch(0.74 0.17 25)",
+      "--sidebar-primary": "oklch(0.74 0.17 25)",
+      "--sidebar-primary-foreground": "oklch(0.985 0 0)",
+    },
+  },
+  crimson: {
+    light: {
+      "--primary": "oklch(0.55 0.26 18)",
+      "--primary-foreground": "oklch(0.985 0 0)",
+      "--ring": "oklch(0.55 0.26 18)",
+      "--sidebar-primary": "oklch(0.55 0.26 18)",
+      "--sidebar-primary-foreground": "oklch(0.985 0 0)",
+    },
+    dark: {
+      "--primary": "oklch(0.68 0.21 18)",
+      "--primary-foreground": "oklch(0.21 0.006 285.885)",
+      "--ring": "oklch(0.68 0.21 18)",
+      "--sidebar-primary": "oklch(0.68 0.21 18)",
+      "--sidebar-primary-foreground": "oklch(0.985 0 0)",
+    },
+  },
   orange: {
     light: {
       "--primary": "oklch(0.705 0.213 47.604)",
@@ -655,6 +762,38 @@ export const themeColors: Record<
       "--sidebar-primary-foreground": "oklch(0.985 0 0)",
     },
   },
+  iris: {
+    light: {
+      "--primary": "oklch(0.53 0.24 285)",
+      "--primary-foreground": "oklch(0.985 0 0)",
+      "--ring": "oklch(0.53 0.24 285)",
+      "--sidebar-primary": "oklch(0.53 0.24 285)",
+      "--sidebar-primary-foreground": "oklch(0.985 0 0)",
+    },
+    dark: {
+      "--primary": "oklch(0.62 0.22 285)",
+      "--primary-foreground": "oklch(0.985 0 0)",
+      "--ring": "oklch(0.62 0.22 285)",
+      "--sidebar-primary": "oklch(0.62 0.22 285)",
+      "--sidebar-primary-foreground": "oklch(0.985 0 0)",
+    },
+  },
+  plum: {
+    light: {
+      "--primary": "oklch(0.56 0.24 310)",
+      "--primary-foreground": "oklch(0.985 0 0)",
+      "--ring": "oklch(0.56 0.24 310)",
+      "--sidebar-primary": "oklch(0.56 0.24 310)",
+      "--sidebar-primary-foreground": "oklch(0.985 0 0)",
+    },
+    dark: {
+      "--primary": "oklch(0.68 0.22 310)",
+      "--primary-foreground": "oklch(0.985 0 0)",
+      "--ring": "oklch(0.68 0.22 310)",
+      "--sidebar-primary": "oklch(0.68 0.22 310)",
+      "--sidebar-primary-foreground": "oklch(0.985 0 0)",
+    },
+  },
   fuchsia: {
     light: {
       "--primary": "oklch(0.591 0.293 322.896)",
@@ -687,9 +826,134 @@ export const themeColors: Record<
       "--sidebar-primary-foreground": "oklch(0.985 0 0)",
     },
   },
+  bronze: {
+    light: {
+      "--primary": "oklch(0.58 0.08 55)",
+      "--primary-foreground": "oklch(0.985 0 0)",
+      "--ring": "oklch(0.58 0.08 55)",
+      "--sidebar-primary": "oklch(0.58 0.08 55)",
+      "--sidebar-primary-foreground": "oklch(0.985 0 0)",
+    },
+    dark: {
+      "--primary": "oklch(0.72 0.07 55)",
+      "--primary-foreground": "oklch(0.21 0.006 285.885)",
+      "--ring": "oklch(0.72 0.07 55)",
+      "--sidebar-primary": "oklch(0.72 0.07 55)",
+      "--sidebar-primary-foreground": "oklch(0.985 0 0)",
+    },
+  },
+  sage: {
+    light: {
+      "--primary": "oklch(0.55 0.04 155)",
+      "--primary-foreground": "oklch(0.985 0 0)",
+      "--ring": "oklch(0.55 0.04 155)",
+      "--sidebar-primary": "oklch(0.55 0.04 155)",
+      "--sidebar-primary-foreground": "oklch(0.985 0 0)",
+    },
+    dark: {
+      "--primary": "oklch(0.7 0.04 155)",
+      "--primary-foreground": "oklch(0.21 0.006 285.885)",
+      "--ring": "oklch(0.7 0.04 155)",
+      "--sidebar-primary": "oklch(0.7 0.04 155)",
+      "--sidebar-primary-foreground": "oklch(0.985 0 0)",
+    },
+  },
+  sand: {
+    light: {
+      "--primary": "oklch(0.58 0.04 75)",
+      "--primary-foreground": "oklch(0.985 0 0)",
+      "--ring": "oklch(0.58 0.04 75)",
+      "--sidebar-primary": "oklch(0.58 0.04 75)",
+      "--sidebar-primary-foreground": "oklch(0.985 0 0)",
+    },
+    dark: {
+      "--primary": "oklch(0.72 0.04 75)",
+      "--primary-foreground": "oklch(0.21 0.006 285.885)",
+      "--ring": "oklch(0.72 0.04 75)",
+      "--sidebar-primary": "oklch(0.72 0.04 75)",
+      "--sidebar-primary-foreground": "oklch(0.985 0 0)",
+    },
+  },
+  mauve: {
+    light: {
+      "--primary": "oklch(0.55 0.04 310)",
+      "--primary-foreground": "oklch(0.985 0 0)",
+      "--ring": "oklch(0.55 0.04 310)",
+      "--sidebar-primary": "oklch(0.55 0.04 310)",
+      "--sidebar-primary-foreground": "oklch(0.985 0 0)",
+    },
+    dark: {
+      "--primary": "oklch(0.7 0.04 310)",
+      "--primary-foreground": "oklch(0.21 0.006 285.885)",
+      "--ring": "oklch(0.7 0.04 310)",
+      "--sidebar-primary": "oklch(0.7 0.04 310)",
+      "--sidebar-primary-foreground": "oklch(0.985 0 0)",
+    },
+  },
+  custom: { light: {}, dark: {} },
 };
 
 export const RADIUS_VALUES = [0, 0.25, 0.375, 0.5, 0.625, 0.75, 1.0];
+
+export interface PresetConfig {
+  name: string;
+  description: string;
+  baseColor: BaseColorName;
+  themeColor: ThemeColorName;
+  radius: number;
+  fontFamily: string;
+  style: "default" | "nova";
+}
+
+export const PRESETS: Record<string, PresetConfig> = {
+  midnight: {
+    name: "Midnight",
+    description: "Deep slate with indigo accent, sharp edges",
+    baseColor: "slate",
+    themeColor: "indigo",
+    radius: 0.375,
+    fontFamily: "Geist",
+    style: "default",
+  },
+  ember: {
+    name: "Ember",
+    description: "Warm stone base with orange accent, rounded",
+    baseColor: "stone",
+    themeColor: "orange",
+    radius: 0.75,
+    fontFamily: "DM Sans",
+    style: "default",
+  },
+  forest: {
+    name: "Forest",
+    description: "Neutral gray with emerald accent, compact",
+    baseColor: "gray",
+    themeColor: "emerald",
+    radius: 0.5,
+    fontFamily: "IBM Plex Sans",
+    style: "nova",
+  },
+  ocean: {
+    name: "Ocean",
+    description: "Cool zinc with sky blue accent, pill shapes",
+    baseColor: "zinc",
+    themeColor: "sky",
+    radius: 1.0,
+    fontFamily: "Plus Jakarta Sans",
+    style: "default",
+  },
+  bloom: {
+    name: "Bloom",
+    description: "Soft neutral with violet accent, geometric",
+    baseColor: "neutral",
+    themeColor: "violet",
+    radius: 0.625,
+    fontFamily: "Outfit",
+    style: "default",
+  },
+};
+
+export const PRESET_LIST = Object.keys(PRESETS);
 
 export const FONT_LIST = [
   "Inter",

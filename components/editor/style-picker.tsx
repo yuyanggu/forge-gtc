@@ -14,22 +14,24 @@ export function StylePicker() {
   const setStyle = useForgeStore((s) => s.setStyle);
 
   return (
-    <div className="space-y-2">
+    <div>
       <label className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
         Style
       </label>
-      <Select
-        value={style}
-        onValueChange={(v) => setStyle(v as "default" | "nova")}
-      >
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder="Select style" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="default">Default</SelectItem>
-          <SelectItem value="nova">Nova (Compact)</SelectItem>
-        </SelectContent>
-      </Select>
+      <div className="mt-2">
+        <Select
+          value={style}
+          onValueChange={(v) => setStyle(v as "default" | "nova")}
+        >
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Select style" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="default">Default</SelectItem>
+            <SelectItem value="nova">Nova (Compact)</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
     </div>
   );
 }
