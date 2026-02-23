@@ -21,8 +21,10 @@ export function ThemeSidebar() {
           <FontPicker />
           <StylePicker />
           <PreviewModeToggle />
-          <RandomizeButton />
         </div>
+      </div>
+      <div className="border-t p-6">
+        <RandomizeButton />
       </div>
     </aside>
   );

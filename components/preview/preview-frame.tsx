@@ -26,7 +26,7 @@ export function PreviewFrame() {
   const [viewport, setViewport] = useState<ViewportSize>("desktop");
   const [iframeReady, setIframeReady] = useState(false);
 
-  const { baseColor, themeColor, radius, fontFamily, mode, style } =
+  const { baseColor, themeColor, radius, fontFamily, mode, style, customColor } =
     useForgeStore();
 
   const sendUpdate = useCallback(() => {
@@ -38,6 +38,7 @@ export function PreviewFrame() {
       themeColor: themeColor as ThemeColorName,
       radius,
       fontFamily,
+      customColor: themeColor === "custom" ? customColor : undefined,
     });
 
     iframe.contentWindow.postMessage(
@@ -50,7 +51,7 @@ export function PreviewFrame() {
       },
       "*"
     );
-  }, [baseColor, themeColor, radius, fontFamily, mode, style]);
+  }, [baseColor, themeColor, radius, fontFamily, mode, style, customColor]);
 
   useEffect(() => {
     const handleMessage = (e: MessageEvent) => {

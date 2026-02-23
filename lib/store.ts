@@ -8,6 +8,7 @@ import {
   THEME_COLOR_LIST,
   RADIUS_VALUES,
   FONT_LIST,
+  PRESETS,
 } from "./themes";
 
 export interface ForgeState {
@@ -19,6 +20,7 @@ export interface ForgeState {
   mode: "light" | "dark";
   style: "default" | "nova";
   projectName: string;
+  customColor: string;
 
   setPreset: (preset: string) => void;
   setBaseColor: (color: BaseColorName) => void;
@@ -28,6 +30,7 @@ export interface ForgeState {
   setMode: (mode: "light" | "dark") => void;
   setStyle: (style: "default" | "nova") => void;
   setProjectName: (name: string) => void;
+  setCustomColor: (hex: string) => void;
   randomize: () => void;
   reset: () => void;
 }
@@ -37,7 +40,7 @@ function randomElement<T>(arr: readonly T[]): T {
 }
 
 const DEFAULTS = {
-  preset: "neutral",
+  preset: "custom",
   baseColor: "neutral" as BaseColorName,
   themeColor: "neutral" as ThemeColorName,
   radius: 0.625,
@@ -45,6 +48,7 @@ const DEFAULTS = {
   mode: "light" as const,
   style: "default" as const,
   projectName: "",
+  customColor: "",
 };
 
 export const useForgeStore = create<ForgeState>((set) => ({
@@ -55,15 +59,19 @@ export const useForgeStore = create<ForgeState>((set) => ({
       set({ preset: "custom" });
       return;
     }
-    const base = BASE_COLOR_LIST.includes(preset as BaseColorName)
-      ? (preset as BaseColorName)
-      : "neutral";
-    set({
-      preset,
-      baseColor: base,
-      themeColor: "neutral",
-      radius: 0.625,
-    });
+    const config = PRESETS[preset];
+    if (config) {
+      set({
+        preset,
+        baseColor: config.baseColor,
+        themeColor: config.themeColor,
+        radius: config.radius,
+        fontFamily: config.fontFamily,
+        style: config.style,
+      });
+      return;
+    }
+    set({ preset: "custom" });
   },
 
   setBaseColor: (color) => set({ baseColor: color, preset: "custom" }),
@@ -73,6 +81,8 @@ export const useForgeStore = create<ForgeState>((set) => ({
   setMode: (mode) => set({ mode }),
   setStyle: (style) => set({ style }),
   setProjectName: (name) => set({ projectName: name }),
+  setCustomColor: (hex) =>
+    set({ customColor: hex, themeColor: "custom" as ThemeColorName, preset: "custom" }),
 
   randomize: () => {
     set({
@@ -95,6 +105,9 @@ export function serializeToParams(state: ForgeState): string {
   params.set("font", state.fontFamily);
   params.set("mode", state.mode);
   params.set("style", state.style);
+  if (state.themeColor === "custom" && state.customColor) {
+    params.set("custom", state.customColor.replace("#", ""));
+  }
   return params.toString();
 }
 
@@ -144,6 +157,16 @@ export function parseFromParams(
   const style = params.get("style");
   if (style === "default" || style === "nova") {
     result.style = style;
+    hasAny = true;
+  }
+
+  const custom = params.get("custom");
+  if (custom && /^[0-9a-fA-F]{6}$/.test(custom)) {
+    result.customColor = `#${custom}`;
+    if (theme === "custom") {
+      result.themeColor = "custom";
+      result.preset = "custom";
+    }
     hasAny = true;
   }
 

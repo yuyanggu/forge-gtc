@@ -1,6 +1,6 @@
 "use client";
 
-import { Copy, Download, Info } from "lucide-react";
+import { Copy, Upload, Info } from "lucide-react";
 import { toast } from "sonner";
 import { useForgeStore } from "@/lib/store";
 import {
@@ -64,6 +64,7 @@ export function ExportDialog({
     style,
     projectName,
     setProjectName,
+    customColor,
   } = useForgeStore();
 
   const config = {
@@ -71,6 +72,7 @@ export function ExportDialog({
     themeColor: themeColor as ThemeColorName,
     radius,
     fontFamily,
+    customColor: themeColor === "custom" ? customColor : undefined,
   };
 
   const cssOutput = generateCSS(config);
@@ -84,13 +86,14 @@ export function ExportDialog({
     radius,
     fontFamily,
     mode,
+    customColor: themeColor === "custom" ? customColor : undefined,
   });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         <Button size="sm" className="gap-1.5">
-          <Download className="h-4 w-4" />
+          <Upload className="h-4 w-4" />
           Export
         </Button>
       </DialogTrigger>

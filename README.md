@@ -1,10 +1,10 @@
 # Forge
 
-**Visual theme editor for [shadcn/ui](https://ui.shadcn.com).** Pick colors, fonts, radius, and mode — see every shadcn component update live. Export CSS variables, Tailwind config, or `components.json` when you're done.
+**Visual theme editor for [shadcn/ui](https://ui.shadcn.com).** Pick colors, fonts, radius, and mode — see every shadcn component update live. Export CSS variables, Tailwind config, `components.json`, or a ready-to-paste AI prompt.
 
 - **Live preview** — Real shadcn components in an iframe; theme updates in &lt;100ms via CSS variables
 - **No account** — Share your theme with a URL; config is encoded in query params
-- **Export** — Copy or download CSS variables, Tailwind v4 `@theme` block, or `components.json`
+- **Export** — Copy CSS variables, Tailwind v4 `@theme` block, `components.json`, or an **AI Prompt** for Claude Projects / Cursor rules
 
 Built with Next.js, [shadcn/ui](https://ui.shadcn.com), Tailwind CSS v4, and Zustand.
 
@@ -51,13 +51,14 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Export
 
-Use the **Export** button in the top bar. The dialog has three tabs:
+Use the **Export** button in the top bar. The dialog has four tabs:
 
 1. **CSS Variables** — `:root` and `.dark` blocks in OKLCH; copy and paste into your `globals.css`.
 2. **Tailwind Config** — Full `@import` + `@theme inline` setup for Tailwind v4.
 3. **components.json** — shadcn CLI config (base color, etc.) for new projects.
+4. **AI Prompt** — A markdown block with your design system config, CSS variables, Tailwind theme, and rules. Paste into Claude Projects instructions, a `.cursorrules` file, or `CLAUDE.md` so AI-generated components use your exact tokens. Optional project name customizes the heading.
 
-Copy to clipboard is supported; a toast confirms the copy.
+Copy to clipboard is supported on all tabs; a toast confirms the copy.
 
 ---
 
@@ -105,10 +106,11 @@ Forge/
 │   │   └── preview-frame.tsx       # Iframe + width toggles
 │   └── ui/                 # shadcn components
 ├── lib/
-│   ├── colors.ts           # OKLCH → hex (culori)
-│   ├── css-generator.ts    # CSS + Tailwind + components.json output
-│   ├── store.ts           # Zustand store + URL serialize/parse
-│   ├── themes.ts           # Base + theme color palettes (OKLCH)
+│   ├── ai-prompt-generator.ts  # AI prompt markdown for export tab
+│   ├── colors.ts               # OKLCH → hex (culori)
+│   ├── css-generator.ts        # CSS + Tailwind + components.json output
+│   ├── store.ts                # Zustand store + URL serialize/parse
+│   ├── themes.ts               # Base + theme color palettes (OKLCH)
 │   └── utils.ts
 ├── public/
 └── package.json
@@ -121,8 +123,8 @@ Forge/
 1. The main app renders an **iframe** whose `src` is `/preview` (a Next.js page).
 2. The **Zustand store** holds theme config (base color, theme color, radius, font, mode, style).
 3. **`lib/css-generator.ts`** turns that config into a full CSS string (`:root` + `.dark`).
-4. **`PreviewFrame`** subscribes to the store and, on change, calls `iframe.contentWindow.postMessage({ type: 'forge-theme-update', css, mode, fontUrl })`.
-5. The **preview page** (`PreviewContent`) listens for that message, updates a `<style id="forge-theme">` tag and the `dark` class on `<html>`, and optionally updates the Google Fonts `<link>`.
+4. **`PreviewFrame`** subscribes to the store and, on change, calls `iframe.contentWindow.postMessage({ type: 'forge-theme-update', css, mode, fontUrl, style })`.
+5. The **preview page** (`PreviewContent`) listens for that message, updates a `<style id="forge-theme">` tag and the `dark` class on `<html>`, updates the Google Fonts `<link>` for the selected font, and sets `data-style` on the document for Nova (compact) styling.
 6. No React re-render in the iframe — only CSS variable and class changes, so updates stay under ~50ms.
 
 ---
